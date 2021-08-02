@@ -26,13 +26,12 @@ def generate_output(md_files, default_front_matter, output_dir):
             print(f'Skipped {file}')
             continue
         
-        print(f'Processing: {file}')
+        # print(f'Processing: {file}')
         o = BytesIO()
         frontmatter.dump(post, o)
         # print(o.getvalue().decode('utf-8'))
         out_file = output_dir / file
         out_file.parent.mkdir(parents=True, exist_ok=True)
-        print(out_file)
         with open(out_file, 'wb') as f:
             f.write(o.getvalue())
         o.close()
@@ -75,11 +74,6 @@ def main():
 
     output_folder.mkdir(parents=True, exist_ok=True)
 
-    print(input_folder, type(input_folder))
-    print(output_folder)
-    print(ignore_list_path, type(ignore_list_path))
-    print(default_yaml_file)
-
     ignore_list = []
     if (ignore_list_path.exists()):
         with open(ignore_list_path, encoding='utf-8') as f:
@@ -95,12 +89,8 @@ def main():
         with open(default_yaml_file, encoding='utf-8') as f:
             default_yaml = yaml.safe_load(f)
 
-    print(ignore_list)
 
-    md_files = get_markdown_files(args.path, ignore_list)
-
-    # for f in md_files:
-    #     print(f)
+    md_files = get_markdown_files(input_folder, ignore_list)
 
     generate_output(md_files, default_yaml, output_folder)
 
